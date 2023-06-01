@@ -7,11 +7,9 @@ import * as SecureStore from "expo-secure-store";
 export const login = createAsyncThunk(
   "auth/login", // This is a name for the thunk (must be unique) not the endpoint
   async (user: UsersEntity, thunkAPI) => {
-    console.log("running login");
     const response = await UsersAPI.login(user);
     // save to secure store
     await SecureStore.setItemAsync("token", response.access_token);
-    console.log(response);
     return response;
   }
 );
@@ -19,15 +17,14 @@ export const login = createAsyncThunk(
 export const logout = createAsyncThunk(
   "auth/logout", // This is a name for the thunk (must be unique) not the endpoint
   async () => {
-    console.log("running logout");
     await SecureStore.deleteItemAsync("token");
   }
 );
+
 export const signup = createAsyncThunk(
   "auth/signup", // This is a name for the thunk (must be unique) not the endpoint
   async (user: UsersEntity, thunkAPI) => {
     const response = UsersAPI.signup(user);
-
     return response;
   }
 );

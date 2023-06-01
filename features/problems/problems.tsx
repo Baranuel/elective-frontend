@@ -20,18 +20,6 @@ import ListOfIssues from "../../components/ListOfIssues";
 
 export function Problems() {
   const { data } = useGetProblems();
-  const { mutate: deleteProblem, isLoading, isSuccess } = useDeleteProblem();
-  const [subject, setSubject] = useState("");
-  const [description, setDescription] = useState("");
-
-  const handleSubmit = (event: any) => {
-    event.preventDefault();
-    console.log(`subject: ${subject}, description: ${description}`);
-
-    // dispatch(
-    //   createProblem(new ProblemEntity(subject, description, photoToDisplay))
-    // );
-  };
 
   return <ListOfIssues data={data} />;
 }

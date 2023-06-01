@@ -1,35 +1,16 @@
-import { View, Text } from "react-native";
-import React from "react";
 import axios, { AxiosResponse } from "axios";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { ProblemEntity, ProblemEntityDto } from "./problemEntity";
-import * as SecureStore from "expo-secure-store";
 import { IP_ADDRESS } from "../../helpers/ipconfig";
 import { useSelector } from "react-redux";
 import { RootState } from "../../store";
-
-const baseUrl = "http://192.168.155.6:3003";
-
-export const useGetTodos = () => {
-  const fetchTodos = async () => {
-    return await axios.get(baseUrl + "/todos");
-  };
-
-  const { isLoading, isError, data, error } = useQuery({
-    queryKey: ["todos"],
-    queryFn: fetchTodos,
-  });
-  return { isLoading, isError, data: data?.data, error };
-};
 
 export default function useGetProblems() {
   const token: string | undefined | null = useSelector(
     (state: RootState) => state.users.token
   );
-  console.log("token for problems api", token);
-  const fetchProblems = async () => {
-    console.log("token", token);
 
+  const fetchProblems = async () => {
     const problems: AxiosResponse<ProblemEntityDto[]> = await axios.get(
       "http://" + IP_ADDRESS + ":3003/problems",
       {
@@ -50,7 +31,6 @@ export default function useGetProblems() {
 
 export const useCreateProblem = () => {
   const queryClient = useQueryClient();
-
   const token: string | undefined | null = useSelector(
     (state: RootState) => state.users.token
   );
@@ -97,7 +77,7 @@ export const useCreateProblem = () => {
           Authorization: `Bearer ${token}`,
         },
       };
-      console.log("formData created post ", formData);
+
       return axios.post(
         "http://" + IP_ADDRESS + ":3003/problems",
         formData,
@@ -129,7 +109,6 @@ export const useDeleteProblem = () => {
         },
       });
     },
-
     onSettled: () => {
       queryClient.invalidateQueries({ queryKey: ["problems"] });
     },
@@ -180,12 +159,10 @@ export const useEditProblem = () => {
         formData,
         config
       );
-      // console.log("response from backend on edit", response);
       return response;
     },
 
     onSettled: () => {
-      console.log("onSettled");
       queryClient.invalidateQueries({ queryKey: ["problems"] });
     },
     onError: (error) => {

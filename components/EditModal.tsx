@@ -6,22 +6,11 @@ import {
   Dimensions,
   Image,
 } from "react-native";
-import * as DocumentPicker from "expo-document-picker";
 import React, { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { AppDispatch, RootState } from "../store";
-import { createProblem } from "../features/problems/problemsSlice";
-import {
-  ProblemEntity,
-  ProblemEntityDto,
-} from "../features/problems/problemEntity";
-import {
-  useCreateProblem,
-  useEditProblem,
-} from "../features/problems/problems-hooks";
+import { ProblemEntityDto } from "../features/problems/problemEntity";
+import { useEditProblem } from "../features/problems/problems-hooks";
 import * as ImagePicker from "expo-image-picker";
-import axios from "axios";
-import { AntDesign } from "@expo/vector-icons";
+
 import { useQueryClient } from "@tanstack/react-query";
 
 interface ModalProps {
@@ -31,11 +20,13 @@ interface ModalProps {
 
 const EditModal = ({ selectedProblem, closeModal }: ModalProps) => {
   const { id, subject, description, imageUrl, category } = selectedProblem;
+
   const [photosToShow, setPhotosToShow] = useState<string[]>(imageUrl);
   const { isLoading, mutate: editProblem, isSuccess } = useEditProblem();
   const queryClient = useQueryClient();
   const [input1, setInput1] = useState(subject);
   const [input2, setInput2] = useState(description);
+  const [image, setImage] = useState<any[]>([]);
 
   useEffect(() => {
     if (isSuccess) {
@@ -51,14 +42,7 @@ const EditModal = ({ selectedProblem, closeModal }: ModalProps) => {
     setInput2(text);
   };
 
-  const [image, setImage] = useState<any[]>([]);
-  const dispatch = useDispatch<AppDispatch>();
-
-  const token: string | undefined | null = useSelector(
-    (state: RootState) => state.users.token
-  );
   const handleSubmit = async () => {
-    console.log("category", category.id);
     editProblem({
       id: id,
       subject: input1,
@@ -69,23 +53,6 @@ const EditModal = ({ selectedProblem, closeModal }: ModalProps) => {
   };
 
   const uploadImage = async () => {
-    // const res = await DocumentPicker.getDocumentAsync({
-    //   copyToCacheDirectory: false,
-    //   type: "*/*",
-    // });
-    // if (res.type === "cancel") return;
-
-    // const { uri, name, type } = res;
-
-    // try {
-    //   const fetchResponse = await fetch(uri);
-    //   console.log(fetchResponse);
-    //   const blob = await fetchResponse.blob();
-    //   setImage((prev) => [...prev, blob]);
-    //   console.log(blob);
-    // } catch (err) {
-    //   console.log(err);
-    // }
     let result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.All,
       allowsEditing: true,
@@ -93,8 +60,8 @@ const EditModal = ({ selectedProblem, closeModal }: ModalProps) => {
       quality: 1,
       allowsMultipleSelection: true,
     });
-
     if (result.canceled) return;
+
     result.assets.map((img) => {
       setPhotosToShow((prev) => [...prev, img.uri]);
       setImage((prev) => [...prev, img.uri]);
@@ -138,6 +105,7 @@ const EditModal = ({ selectedProblem, closeModal }: ModalProps) => {
       <TouchableOpacity onPress={() => closeModal()}>
         <Text>Close</Text>
       </TouchableOpacity>
+
       <View>
         <Text>Subject</Text>
         <TextInput
@@ -163,7 +131,7 @@ const EditModal = ({ selectedProblem, closeModal }: ModalProps) => {
             borderColor: "black",
             borderWidth: 1,
           }}
-          onChangeText={handleInput1Change}
+          onChangeText={handleInput2Change}
         />
         <View>
           <Text>Images</Text>

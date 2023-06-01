@@ -22,9 +22,11 @@ import BottomTabs from "./navigation/BottomTabs";
 import Home from "./screens/Home";
 import CreateIssue from "./screens/CreateIssue";
 import { signup } from "./features/users/usersSlice";
+import React from "react";
 
 // Create a client
 const queryClient = new QueryClient();
+
 const Stack = createNativeStackNavigator();
 
 export default function App() {
@@ -42,6 +44,7 @@ export default function App() {
                 options={{ title: "Home", headerShown: false }}
               />
             </Stack.Group>
+
             <Stack.Group screenOptions={{ presentation: "modal" }}>
               <Stack.Screen name="CreateIssue" component={CreateIssue} />
             </Stack.Group>

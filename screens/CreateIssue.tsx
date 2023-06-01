@@ -1,10 +1,4 @@
-import {
-  View,
-  Text,
-  Dimensions,
-  Touchable,
-  TouchableOpacity,
-} from "react-native";
+import { View, Text, Dimensions, TouchableOpacity } from "react-native";
 import React from "react";
 import Modal from "../components/Modal";
 
@@ -41,6 +35,7 @@ const CreateIssue = () => {
       description: "Problems with washing machine or laundry-related concerns.",
     },
   ];
+
   const windowWidth = Dimensions.get("window").width;
   const [selectedCategory, setSelectedCategory] = React.useState(categories[0]);
   const [visibleModal, setVisibleModal] = React.useState(false);
