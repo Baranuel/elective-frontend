@@ -52,7 +52,6 @@ const usersSlice = createSlice({
   extraReducers: (builder) => {
     // Add reducers for additional action types here, and handle loading state as needed
     builder.addCase(signup.fulfilled, (state, action) => {
-      console.log("running signup fulfilled");
       state.error = undefined;
       if (action.payload.id != undefined) {
         state.error = "Signup success";

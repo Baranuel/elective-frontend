@@ -26,7 +26,7 @@ export function Signup() {
     <View>
       <Text>Signup</Text>
       <TextInput
-        placeholder="usernam"
+        placeholder="username"
         style={styles.input}
         onChangeText={setUsername}
         value={username}
